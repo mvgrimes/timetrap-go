@@ -29,6 +29,8 @@ func runNow(args []string) {
 		os.Exit(1)
 	}
 
-	meta := tt.GetMeta(viper.GetString("database_file"))
-	fmt.Printf("%s", meta.CurrentSheet)
+	t := tt.TimeTrap{}
+	t.Connect(viper.GetString("database_file"))
+	meta := t.GetMeta()
+	fmt.Printf("%s\n", meta.CurrentSheet)
 }
