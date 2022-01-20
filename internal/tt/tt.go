@@ -256,6 +256,47 @@ func (t *TimeTrap) List() []SheetSummary {
 	return summaries
 }
 
+type SheetDetails struct {
+	ID       string `json:"id"`
+	Day      string
+	Start    time.Time     `json:"start"`
+	End      time.Time     `json:"end"`
+	Duration time.Duration `json:"duration"`
+	Note     string        `json:"note"`
+}
+
+func (t *TimeTrap) Display() []SheetDetails {
+	meta := t.GetMeta()
+
+	results, err := t.db.Query(`
+		SELECT
+				id,
+				start,
+				end,
+				(strftime("%s",ifnull(end,datetime('now','localtime')))-strftime("%s",start))*1000000000 as duration,
+				note
+		FROM ENTRIES
+		WHERE sheet = ?
+		ORDER BY start;
+		`, meta.CurrentSheet)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	summaries := []SheetDetails{}
+	for results.Next() {
+		var summary SheetDetails
+		err = results.Scan(&summary.ID, &summary.Start, &summary.End, &summary.Duration, &summary.Note)
+		summary.Day = summary.Start.Format("Mon Jan 02, 2006")
+		if err != nil {
+			panic(err.Error())
+		}
+		summaries = append(summaries, summary)
+	}
+
+	return summaries
+}
+
 func ParseTime(timeStr string) (time.Time, error) {
 	if timeStr == "" {
 		return time.Now(), nil
