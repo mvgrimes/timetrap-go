@@ -27,6 +27,7 @@ func init() {
 }
 
 func runOut(args []string) {
+	// TODO: clock out of a particular sheet
 	// if len(args) == 1 {
 	// sheet = args[0]
 	// }

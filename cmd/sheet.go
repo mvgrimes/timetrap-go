@@ -27,7 +27,7 @@ func init() {
 
 func runSheet(args []string) {
 	if len(args) == 0 {
-		// list sheets
+		// TODO: list sheets
 	} else if len(args) > 1 {
 		fmt.Println("usage: t sheet [TIMESHEET]")
 		os.Exit(1)
