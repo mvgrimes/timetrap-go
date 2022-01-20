@@ -32,7 +32,8 @@ func runList(args []string) {
 	t := tt.TimeTrap{}
 	t.Connect(viper.GetString("database_file"))
 
-	fmt.Printf(" %-18s%-12s%-12s%s\n", "Timesheet", "Running", "Today", "Total Time")
+	fmt.Printf(" %-15s  %-10s  %-10s  %s\n",
+		"Timesheet", "Running", "Today", "Total Time")
 	summaries := t.List()
 	for _, summary := range summaries {
 		active := " "
@@ -42,6 +43,13 @@ func runList(args []string) {
 		if summary.Active {
 			active = "*"
 		}
-		fmt.Printf("%s%-18s%-12s%-12s%s\n", active, summary.Sheet, summary.Running, summary.Today, summary.Total)
+		fmt.Printf(
+			"%s%-15s% 10s  % 10s%12s\n",
+			active,
+			summary.Sheet,
+			tt.FmtDuration(summary.Running),
+			tt.FmtDuration(summary.Today),
+			tt.FmtDuration(summary.Total),
+		)
 	}
 }
