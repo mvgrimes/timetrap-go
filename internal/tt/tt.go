@@ -255,7 +255,7 @@ func (t *TimeTrap) List() []SheetSummary {
 						strftime("%s",ifnull(end,datetime('now','localtime')))-strftime("%s",start)
 					else 0 end)*1000000000 as today,
 				sum(strftime("%s",ifnull(end,datetime('now','localtime')))-strftime("%s",start))*1000000000 as total
-		FROM ENTRIES
+		FROM entries
 		GROUP BY sheet
 		ORDER BY sheet;`,
 	)
@@ -273,49 +273,6 @@ func (t *TimeTrap) List() []SheetSummary {
 		summary.Active = summary.Sheet == meta.CurrentSheet
 		summary.LastActive = summary.Sheet == meta.LastSheet
 		// fmt.Printf("s: %v\n", summary)
-		summaries = append(summaries, summary)
-	}
-
-	return summaries
-}
-
-// FIXME: terrible name
-type SheetDetails struct {
-	ID       int `json:"id"`
-	Day      string
-	Start    sql.NullTime  `json:"start"`
-	End      sql.NullTime  `json:"end"`
-	Duration time.Duration `json:"duration"`
-	Note     string        `json:"note"`
-}
-
-// FIXME: terrible name
-func (t *TimeTrap) Display() []SheetDetails {
-	meta := t.GetMeta()
-
-	results, err := t.db.Query(`
-		SELECT
-				id,
-				start,
-				end,
-				(strftime("%s",ifnull(end,datetime('now','localtime')))-strftime("%s",start))*1000000000 as duration,
-				note
-		FROM ENTRIES
-		WHERE sheet = ?
-		ORDER BY start;
-		`, meta.CurrentSheet)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	summaries := []SheetDetails{}
-	for results.Next() {
-		var summary SheetDetails
-		err = results.Scan(&summary.ID, &summary.Start, &summary.End, &summary.Duration, &summary.Note)
-		summary.Day = summary.Start.Time.Format("Mon Jan 02, 2006")
-		if err != nil {
-			panic(err.Error())
-		}
 		summaries = append(summaries, summary)
 	}
 

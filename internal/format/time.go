@@ -6,6 +6,10 @@ import (
 )
 
 func Duration(d time.Duration) string {
+	if d < 0 {
+		return fmt.Sprintf("%s", d) // is there a better way to convert?
+	}
+
 	d = d.Round(time.Second)
 	h := d / time.Hour
 	d -= h * time.Hour

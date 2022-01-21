@@ -50,7 +50,7 @@ func runDisplay(includeIds bool, args []string) {
 	t.Connect(viper.GetString("database_file"))
 
 	meta := t.GetMeta()
-	entries := t.Display()
+	entries := t.GetEntries(meta.CurrentSheet)
 
 	format.DisplayEntries(entries, meta.CurrentSheet, includeIds)
 }

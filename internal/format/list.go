@@ -34,7 +34,7 @@ func DisplayList(summaries []tt.SheetSummary, includeArchived bool) {
 	}
 }
 
-func DisplayEntries(entries []tt.SheetDetails, sheet string, includeIds bool) {
+func DisplayEntries(entries []tt.Entry, sheet string, includeIds bool) {
 	idHeader := ""
 	if includeIds {
 		idHeader = "Id"
@@ -45,28 +45,46 @@ func DisplayEntries(entries []tt.SheetDetails, sheet string, includeIds bool) {
 	lastDay := ""
 	var total time.Duration
 	for _, entry := range entries {
+		entryDay := entry.Start.Time.Format("Mon Jan 02, 2006")
+
 		day := ""
-		if lastDay != entry.Day {
-			day = entry.Day
+		if lastDay != entryDay {
+			day = entryDay
 		}
+
 		id := ""
 		if includeIds {
 			id = fmt.Sprintf("%d", entry.ID)
 		}
+
+		endTimeStr := ""
+		if entry.End.Valid {
+			endTimeStr = entry.End.Time.Format("15:04:05")
+		}
+
+		endTime := time.Now()
+		if entry.End.Valid {
+			endTime = entry.End.Time
+		}
+		duration := endTime.Sub(entry.Start.Time)
+
 		fmt.Printf(
 			"%-4s %-18s %-8s - %-8s   %8s   %s\n",
 			id,
 			day,
 			entry.Start.Time.Format("15:04:05"),
-			entry.End.Time.Format("15:04:05"),
-			Duration(entry.Duration),
+			endTimeStr,
+			Duration(duration),
 			entry.Note,
 		)
-		// TODO: display "" for empty end
-		lastDay = day
-		total += entry.Duration
+
+		if day != "" {
+			lastDay = day
+		}
+		total += duration
 		// TODO: add daily total
 	}
+
 	fmt.Printf("    -------------------------------------------------\n")
 	fmt.Printf("    Total %43s\n", Duration(total))
 }
