@@ -253,7 +253,7 @@ func (t *TimeTrap) List() []SheetSummary {
 }
 
 type SheetDetails struct {
-	ID       string `json:"id"`
+	ID       int64 `json:"id"`
 	Day      string
 	Start    time.Time     `json:"start"`
 	End      time.Time     `json:"end"`

@@ -53,8 +53,12 @@ func runDisplay(args []string) {
 	t.Connect(viper.GetString("database_file"))
 
 	meta := t.GetMeta()
+	idHeader := ""
+	if viper.GetBool("ids") {
+		idHeader = "Id"
+	}
 	fmt.Printf("Timesheet: %s\n", meta.CurrentSheet)
-	fmt.Printf("    %-18s %-8s   %-8s   %8s   %s\n", "Day", "Start", "End", "Duration", "Notes")
+	fmt.Printf("%-4s %-18s %-8s   %-8s   %8s   %s\n", idHeader, "Day", "Start", "End", "Duration", "Notes")
 	entries := t.Display()
 	lastDay := ""
 	var total time.Duration
@@ -63,8 +67,13 @@ func runDisplay(args []string) {
 		if lastDay != entry.Day {
 			day = entry.Day
 		}
+		id := ""
+		if viper.GetBool("ids") {
+			id = fmt.Sprintf("%d", entry.ID)
+		}
 		fmt.Printf(
-			"    %-18s %-8s - %-8s   %8s   %s\n",
+			"%-4s %-18s %-8s - %-8s   %8s   %s\n",
+			id,
 			day,
 			entry.Start.Format("15:04:05"),
 			entry.End.Format("15:04:05"),
