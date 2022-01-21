@@ -3,8 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var backendCmd = &cobra.Command{
@@ -27,7 +29,16 @@ func runBackend(args []string) {
 		os.Exit(1)
 	}
 
-	// TODO: open the sqlite file
-	fmt.Println("backend command is not yet implemented")
-	os.Exit(1)
+	cmd := exec.Command("sqlite3", viper.GetString("database_file"))
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	os.Exit(0)
 }
