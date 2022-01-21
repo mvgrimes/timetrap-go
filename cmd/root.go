@@ -32,9 +32,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("round", "r", false, "Round output to 15 minute start and end times.")
 	rootCmd.PersistentFlags().BoolP("yes", "y", false, "Noninteractive, assume yes as answer to all prompts.")
 	rootCmd.PersistentFlags().Bool("debug", false, "Display stack traces for errors.")
-	viper.BindPFlag("round", rootCmd.PersistentFlags().Lookup("round"))
-	viper.BindPFlag("yes", rootCmd.PersistentFlags().Lookup("yes"))
-	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 }
 
 func initConfig() {

@@ -20,7 +20,8 @@ var displayCmd = &cobra.Command{
       to display all unarchived sheets or 'full' to display archived and
       unarchived sheets.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runDisplay(args)
+		includeIds, _ := cmd.Flags().GetBool("ids")
+		runDisplay(includeIds, args)
 	},
 }
 
@@ -35,15 +36,9 @@ Valid built-in formats are ical, csv, json, ids, factor, and text (default).
 Documentation on defining custom formats can be found in the README included
 in this`)
 	displayCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
-
-	viper.BindPFlag("ids", displayCmd.PersistentFlags().Lookup("ids"))
-	viper.BindPFlag("start", displayCmd.PersistentFlags().Lookup("start"))
-	viper.BindPFlag("end", displayCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("format", displayCmd.PersistentFlags().Lookup("format"))
-	viper.BindPFlag("grep", displayCmd.PersistentFlags().Lookup("grep"))
 }
 
-func runDisplay(args []string) {
+func runDisplay(includeIds bool, args []string) {
 	if len(args) > 0 {
 		fmt.Println("usage: t display")
 		os.Exit(1)
@@ -54,7 +49,7 @@ func runDisplay(args []string) {
 
 	meta := t.GetMeta()
 	idHeader := ""
-	if viper.GetBool("ids") {
+	if includeIds {
 		idHeader = "Id"
 	}
 	fmt.Printf("Timesheet: %s\n", meta.CurrentSheet)
@@ -68,7 +63,7 @@ func runDisplay(args []string) {
 			day = entry.Day
 		}
 		id := ""
-		if viper.GetBool("ids") {
+		if includeIds {
 			id = fmt.Sprintf("%d", entry.ID)
 		}
 		fmt.Printf(

@@ -18,7 +18,8 @@ var inCmd = &cobra.Command{
 	Short:   "Start the timer for the current timesheet.",
 	Long:    `Start the timer for the current timesheet.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runIn(args)
+		atTime, _ := cmd.Flags().GetString("at")
+		runIn(atTime, args)
 	},
 }
 
@@ -29,13 +30,13 @@ func init() {
 	viper.BindPFlag("at", inCmd.PersistentFlags().Lookup("at"))
 }
 
-func runIn(args []string) {
+func runIn(atTimeStr string, args []string) {
 	note := ""
 	if len(args) > 0 {
 		note = strings.Join(args, " ")
 	}
 
-	atTime, err := parse.Time(viper.GetString("at"))
+	atTime, err := parse.Time(atTimeStr)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)

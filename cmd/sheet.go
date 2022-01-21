@@ -29,7 +29,10 @@ func init() {
 
 func runSheet(args []string) {
 	if len(args) == 0 {
-		format.DisplayList(true)
+		t := tt.TimeTrap{}
+		t.Connect(viper.GetString("database_file"))
+		summaries := t.List()
+		format.DisplayList(summaries, true)
 		return
 	} else if len(args) > 1 {
 		fmt.Println("usage: t sheet [TIMESHEET]")

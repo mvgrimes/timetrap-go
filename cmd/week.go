@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	// "github.com/spf13/viper"
 )
 
 var weekCmd = &cobra.Command{
@@ -27,10 +27,6 @@ func init() {
 Valid built-in formats are ical, csv, json, ids, factor, and text (default).
 Documentation on defining custom formats can be found in the README included
 in this`)
-
-	viper.BindPFlag("ids", weekCmd.PersistentFlags().Lookup("ids"))
-	viper.BindPFlag("end", weekCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("format", weekCmd.PersistentFlags().Lookup("format"))
 }
 
 func runWeek(args []string) {

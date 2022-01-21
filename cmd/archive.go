@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	// "github.com/spf13/viper"
 )
 
 var archiveCmd = &cobra.Command{
@@ -24,10 +24,6 @@ func init() {
 	archiveCmd.PersistentFlags().StringP("start", "s", "", "Include entries that start on this date or later")
 	archiveCmd.PersistentFlags().StringP("end", "e", "", "Include entries that start on this date or earlier")
 	archiveCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
-
-	viper.BindPFlag("start", archiveCmd.PersistentFlags().Lookup("start"))
-	viper.BindPFlag("end", archiveCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("grep", archiveCmd.PersistentFlags().Lookup("grep"))
 }
 
 func runArchive(args []string) {

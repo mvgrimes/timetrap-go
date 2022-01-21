@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var editCmd = &cobra.Command{
@@ -26,12 +25,6 @@ func init() {
 	editCmd.PersistentFlags().StringP("end", "e", "", "Change the end time to <time>")
 	editCmd.PersistentFlags().BoolP("append", "z", false, "Append to the current note instead of replacing it the delimiter between appends notes is configurable (see config)")
 	editCmd.PersistentFlags().StringP("move", "m", "", "Move to another sheet")
-
-	viper.BindPFlag("ids", editCmd.PersistentFlags().Lookup("ids"))
-	viper.BindPFlag("start", editCmd.PersistentFlags().Lookup("start"))
-	viper.BindPFlag("end", editCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("append", editCmd.PersistentFlags().Lookup("append"))
-	viper.BindPFlag("move", editCmd.PersistentFlags().Lookup("move"))
 }
 
 func runEdit(args []string) {

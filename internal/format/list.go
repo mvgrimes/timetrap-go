@@ -3,18 +3,12 @@ package format
 import (
 	"fmt"
 
-	"github.com/spf13/viper"
-
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 )
 
-func DisplayList(includeArchived bool) {
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
-
+func DisplayList(summaries []tt.SheetSummary, includeArchived bool) {
 	fmt.Printf(" %-15s  %-10s  %-10s  %s\n",
 		"Timesheet", "Running", "Today", "Total Time")
-	summaries := t.List()
 	for _, summary := range summaries {
 		if (!includeArchived) && len(summary.Sheet) > 0 && summary.Sheet[0:1] == "_" {
 			continue

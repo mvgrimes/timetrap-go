@@ -5,8 +5,10 @@ import (
 	"os"
 
 	"github.com/mvgrimes/timetrap-go/internal/format"
+	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var listCmd = &cobra.Command{
@@ -30,5 +32,9 @@ func runList(includeArchived bool, args []string) {
 		os.Exit(1)
 	}
 
-	format.DisplayList(includeArchived)
+	t := tt.TimeTrap{}
+	t.Connect(viper.GetString("database_file"))
+	summaries := t.List()
+
+	format.DisplayList(summaries, includeArchived)
 }

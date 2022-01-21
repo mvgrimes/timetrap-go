@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	// "github.com/spf13/viper"
 )
 
 var todayCmd = &cobra.Command{
@@ -14,6 +14,9 @@ var todayCmd = &cobra.Command{
 	Short:   "",
 	Long:    "",
 	Run: func(cmd *cobra.Command, args []string) {
+		// fmt.Printf("%#v\n", cmd)
+		// x, _ := cmd.Flags().GetBool("ids")
+		// fmt.Printf("%#v\n", x)
 		runToday(args)
 	},
 }
@@ -26,9 +29,6 @@ func init() {
 Valid built-in formats are ical, csv, json, ids, factor, and text (default).
 Documentation on defining custom formats can be found in the README included
 in this`)
-
-	viper.BindPFlag("ids", todayCmd.PersistentFlags().Lookup("ids"))
-	viper.BindPFlag("format", todayCmd.PersistentFlags().Lookup("format"))
 }
 
 func runToday(args []string) {

@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var resumeCmd = &cobra.Command{
@@ -24,10 +23,6 @@ func init() {
 	resumeCmd.PersistentFlags().StringP("start", "s", "", "Include entries that start on this date or later")
 	resumeCmd.PersistentFlags().StringP("end", "e", "", "Include entries that start on this date or earlier")
 	resumeCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
-
-	viper.BindPFlag("start", resumeCmd.PersistentFlags().Lookup("start"))
-	viper.BindPFlag("end", resumeCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("grep", resumeCmd.PersistentFlags().Lookup("grep"))
 }
 
 func runResume(args []string) {

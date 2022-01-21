@@ -16,7 +16,8 @@ var killCmd = &cobra.Command{
 	Short:   "",
 	Long:    "",
 	Run: func(cmd *cobra.Command, args []string) {
-		runKill(args)
+		id, _ := cmd.Flags().GetInt32("id")
+		runKill(id, args)
 	},
 }
 
@@ -24,13 +25,9 @@ func init() {
 	rootCmd.AddCommand(killCmd)
 
 	killCmd.PersistentFlags().Int32P("id", "", 0, "Delete entry with id <id> instead of timesheet")
-
-	viper.BindPFlag("id", killCmd.PersistentFlags().Lookup("id"))
 }
 
-func runKill(args []string) {
-	id := viper.GetInt32("id")
-
+func runKill(id int32, args []string) {
 	if id == 0 {
 		if len(args) != 1 {
 			fmt.Printf("usage: t kill [SHEET]")
