@@ -33,5 +33,6 @@ func runNow(args []string) {
 	t := tt.TimeTrap{}
 	t.Connect(viper.GetString("database_file"))
 	meta := t.GetMeta()
+
 	fmt.Printf("%s\n", meta.CurrentSheet)
 }

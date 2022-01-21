@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mvgrimes/timetrap-go/internal/parse"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
@@ -35,7 +36,7 @@ func runIn(args []string) {
 		note = strings.Join(args, " ")
 	}
 
-	atTime, err := tt.ParseTime(viper.GetString("at"))
+	atTime, err := parse.Time(viper.GetString("at"))
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
