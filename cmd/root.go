@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -27,6 +27,18 @@ func Execute() {
 }
 
 func init() {
+	lvl, ok := os.LookupEnv("LOG_LEVEL")
+	if !ok {
+		lvl = "warn"
+	}
+	// parse string, this is built-in feature of logrus
+	ll, err := log.ParseLevel(lvl)
+	if err != nil {
+		ll = log.DebugLevel
+	}
+	// set global log level
+	log.SetLevel(ll)
+
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().BoolP("round", "r", false, "Round output to 15 minute start and end times.")
@@ -77,7 +89,7 @@ func initConfig() {
 	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// no config file, just use defaults
-			log.Println("unable to load config file using defaults")
+			log.Debugln("unable to load config file using defaults")
 		} else {
 			panic(fmt.Errorf("Fatal error reading config file: %w\n", err))
 		}

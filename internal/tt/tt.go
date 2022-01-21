@@ -3,7 +3,7 @@ package tt
 import (
 	"errors"
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"strings"
 	"time"
@@ -62,7 +62,7 @@ func (t *TimeTrap) GetMeta() Meta {
 		panic(err.Error())
 	}
 
-	// log.Printf("meta: %v", meta)
+	log.Debugf("meta: %v", meta)
 
 	return meta
 }
@@ -85,7 +85,7 @@ func (t *TimeTrap) GetCurrentEntry() Entry {
 		panic(err.Error())
 	}
 
-	log.Printf("entry: %v", entry)
+	log.Debugf("entry: %v", entry)
 	return entry
 }
 
@@ -106,7 +106,7 @@ func (t *TimeTrap) GetEntry(id int) Entry {
 		panic(err.Error())
 	}
 
-	log.Printf("entry: %v", entry)
+	log.Debugf("entry: %v", entry)
 	return entry
 }
 
@@ -193,7 +193,7 @@ func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
 	if err != nil {
 		panic(err.Error())
 	}
-	log.Printf("result id = %d\n", id)
+	log.Debugf("result id = %d\n", id)
 
 	return t.GetCurrentEntry(), nil
 }
