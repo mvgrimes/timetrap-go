@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var configureCmd = &cobra.Command{
@@ -27,8 +28,8 @@ func runConfigure(args []string) {
 		os.Exit(1)
 	}
 
-	// TODO: print the location of the config file
+	fmt.Printf("Config file is at \"%s\"\n", viper.GetViper().ConfigFileUsed())
 	// TODO: does this do anything else?
-	fmt.Println("configure command is not yet implemented")
-	os.Exit(1)
+
+	os.Exit(0)
 }
