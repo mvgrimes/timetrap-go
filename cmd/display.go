@@ -12,8 +12,9 @@ import (
 )
 
 var displayCmd = &cobra.Command{
-	Use:   "display",
-	Short: "Display the current timesheet or a specific.",
+	Use:     "display",
+	Aliases: []string{"d"},
+	Short:   "Display the current timesheet or a specific.",
 	Long: `Display the current timesheet or a specific. Pass 'all' as SHEET
       to display all unarchived sheets or 'full' to display archived and
       unarchived sheets.`,

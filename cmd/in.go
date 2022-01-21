@@ -12,9 +12,10 @@ import (
 )
 
 var inCmd = &cobra.Command{
-	Use:   "in",
-	Short: "Start the timer for the current timesheet.",
-	Long:  `Start the timer for the current timesheet.`,
+	Use:     "in",
+	Aliases: []string{"i"},
+	Short:   "Start the timer for the current timesheet.",
+	Long:    `Start the timer for the current timesheet.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runIn(args)
 	},

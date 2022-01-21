@@ -11,9 +11,10 @@ import (
 )
 
 var nowCmd = &cobra.Command{
-	Use:   "now",
-	Short: "Show all running entries.",
-	Long:  `Show all running entries.`,
+	Use:     "now",
+	Aliases: []string{"n"},
+	Short:   "Show all running entries.",
+	Long:    `Show all running entries.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runNow(args)
 	},

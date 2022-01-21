@@ -11,9 +11,10 @@ import (
 )
 
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Start the timer for the current timesheet.",
-	Long:  `Start the timer for the current timesheet.`,
+	Use:     "list",
+	Aliases: []string{"l"},
+	Short:   "Show the available timesheets.",
+	Long:    `Show the available timesheets.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runList(args)
 	},

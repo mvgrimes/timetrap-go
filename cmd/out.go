@@ -11,9 +11,10 @@ import (
 )
 
 var outCmd = &cobra.Command{
-	Use:   "out",
-	Short: "Stop the timer for a timesheet.",
-	Long:  `Stop the timer for a timesheet.`,
+	Use:     "out",
+	Aliases: []string{"o"},
+	Short:   "Stop the timer for a timesheet.",
+	Long:    `Stop the timer for a timesheet.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runOut(args)
 	},
