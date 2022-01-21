@@ -16,7 +16,7 @@ var killCmd = &cobra.Command{
 	Short:   "",
 	Long:    "",
 	Run: func(cmd *cobra.Command, args []string) {
-		id, _ := cmd.Flags().GetInt32("id")
+		id, _ := cmd.Flags().GetInt("id")
 		runKill(id, args)
 	},
 }
@@ -24,10 +24,10 @@ var killCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(killCmd)
 
-	killCmd.PersistentFlags().Int32P("id", "", 0, "Delete entry with id <id> instead of timesheet")
+	killCmd.PersistentFlags().IntP("id", "", 0, "Delete entry with id <id> instead of timesheet")
 }
 
-func runKill(id int32, args []string) {
+func runKill(id int, args []string) {
 	if id == 0 {
 		if len(args) != 1 {
 			fmt.Printf("usage: t kill [SHEET]")
@@ -39,7 +39,7 @@ func runKill(id int32, args []string) {
 	}
 }
 
-func killEntry(id int32) {
+func killEntry(id int) {
 	t := tt.TimeTrap{}
 	t.Connect(viper.GetString("database_file"))
 

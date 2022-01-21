@@ -259,7 +259,7 @@ func (t *TimeTrap) List() []SheetSummary {
 }
 
 type SheetDetails struct {
-	ID       int64 `json:"id"`
+	ID       int `json:"id"`
 	Day      string
 	Start    sql.NullTime  `json:"start"`
 	End      sql.NullTime  `json:"end"`
@@ -340,7 +340,7 @@ func (t *TimeTrap) deleteSheet(sheet string) error {
 	return nil
 }
 
-func (t *TimeTrap) DeleteEntry(id int32) error {
+func (t *TimeTrap) DeleteEntry(id int) error {
 	var count int
 	err := t.db.QueryRow("SELECT COUNT(*) FROM entries WHERE id = ?;", id).Scan(&count)
 	if err != nil {
@@ -367,7 +367,7 @@ func (t *TimeTrap) DeleteEntry(id int32) error {
 	return t.deleteEntry(id)
 }
 
-func (t *TimeTrap) deleteEntry(id int32) error {
+func (t *TimeTrap) deleteEntry(id int) error {
 	_, err := t.db.Exec(`DELETE FROM entries WHERE id = ?;`, id)
 	if err != nil {
 		panic(err.Error())

@@ -20,7 +20,7 @@ var editCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(editCmd)
 
-	editCmd.PersistentFlags().Int32P("id", "i", 0, "lter entry with id <id> instead of the running entry")
+	editCmd.PersistentFlags().IntP("id", "i", 0, "lter entry with id <id> instead of the running entry")
 	editCmd.PersistentFlags().StringP("start", "s", "", "Change the start time to <time>")
 	editCmd.PersistentFlags().StringP("end", "e", "", "Change the end time to <time>")
 	editCmd.PersistentFlags().BoolP("append", "z", false, "Append to the current note instead of replacing it the delimiter between appends notes is configurable (see config)")
