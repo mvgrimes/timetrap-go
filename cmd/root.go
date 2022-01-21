@@ -13,9 +13,9 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "t",
 	Short: "Timetrap - Simple Time Tracking (go)",
-	// Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("root called")
+		// TODO: print the debug and examples
 	},
 }
 
