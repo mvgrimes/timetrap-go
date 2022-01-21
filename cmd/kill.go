@@ -6,6 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/mvgrimes/timetrap-go/internal/tt"
 )
 
 var killCmd = &cobra.Command{
@@ -21,21 +23,43 @@ var killCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(killCmd)
 
-	killCmd.PersistentFlags().StringP("start", "s", "", "Include entries that start on this date or later")
-	killCmd.PersistentFlags().StringP("end", "e", "", "Include entries that start on this date or earlier")
-	killCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
+	killCmd.PersistentFlags().Int32P("id", "", 0, "Delete entry with id <id> instead of timesheet")
 
-	viper.BindPFlag("start", killCmd.PersistentFlags().Lookup("start"))
-	viper.BindPFlag("end", killCmd.PersistentFlags().Lookup("end"))
-	viper.BindPFlag("grep", killCmd.PersistentFlags().Lookup("grep"))
+	viper.BindPFlag("id", killCmd.PersistentFlags().Lookup("id"))
 }
 
 func runKill(args []string) {
-	if len(args) != 0 {
-		fmt.Printf("usage: t kill [SHEET]")
+	id := viper.GetInt32("id")
+
+	if id == 0 {
+		if len(args) != 1 {
+			fmt.Printf("usage: t kill [SHEET]")
+			os.Exit(1)
+		}
+		killSheet(args[0])
+	} else {
+		killEntry(id)
+	}
+}
+
+func killEntry(id int32) {
+	t := tt.TimeTrap{}
+	t.Connect(viper.GetString("database_file"))
+
+	err := t.DeleteEntry(id)
+	if err != nil {
+		fmt.Printf(err.Error())
 		os.Exit(1)
 	}
+}
 
-	fmt.Println("kill command is not yet implemented")
-	os.Exit(1)
+func killSheet(sheet string) {
+	t := tt.TimeTrap{}
+	t.Connect(viper.GetString("database_file"))
+
+	err := t.DeleteSheet(sheet)
+	if err != nil {
+		fmt.Printf(err.Error())
+		os.Exit(1)
+	}
 }

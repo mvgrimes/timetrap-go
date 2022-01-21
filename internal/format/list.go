@@ -3,8 +3,9 @@ package format
 import (
 	"fmt"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
 	"github.com/spf13/viper"
+
+	"github.com/mvgrimes/timetrap-go/internal/tt"
 )
 
 func DisplayList(includeArchived bool) {

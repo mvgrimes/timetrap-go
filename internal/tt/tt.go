@@ -4,9 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	"database/sql"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -294,4 +297,82 @@ func (t *TimeTrap) Display() []SheetDetails {
 	}
 
 	return summaries
+}
+
+func (t *TimeTrap) DeleteSheet(sheet string) error {
+	var count int
+	err := t.db.QueryRow("SELECT COUNT(*) FROM entries WHERE sheet = ?;", sheet).Scan(&count)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if count == 0 {
+		fmt.Printf("can't find \"%s\" to kill\n", sheet)
+		os.Exit(1)
+	}
+
+	fmt.Printf("are you sure you want to delete %d entries on sheet \"%s\"? ", count, sheet)
+	var input string
+	_, err = fmt.Scanln(&input)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if !(strings.EqualFold(input, "y") || strings.EqualFold(input, "yes")) {
+		fmt.Println("will not kill")
+		return nil
+	}
+
+	return t.deleteSheet(sheet)
+}
+
+func (t *TimeTrap) deleteSheet(sheet string) error {
+	res, err := t.db.Exec(`DELETE FROM entries WHERE sheet = ?;`, sheet)
+	if err != nil {
+		panic(err.Error())
+	}
+	rowCnt, err := res.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Printf("killed %d entries\n", rowCnt)
+
+	return nil
+}
+
+func (t *TimeTrap) DeleteEntry(id int32) error {
+	var count int
+	err := t.db.QueryRow("SELECT COUNT(*) FROM entries WHERE id = ?;", id).Scan(&count)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if count != 1 {
+		fmt.Printf("couldn't find entry with id: %d\n", id)
+		os.Exit(1)
+	}
+
+	fmt.Printf("are you sure you want to delete entry %d? ", id)
+	var input string
+	_, err = fmt.Scanln(&input)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if !(strings.EqualFold(input, "y") || strings.EqualFold(input, "yes")) {
+		fmt.Println("will not kill")
+		return nil
+	}
+
+	return t.deleteEntry(id)
+}
+
+func (t *TimeTrap) deleteEntry(id int32) error {
+	_, err := t.db.Exec(`DELETE FROM entries WHERE id = ?;`, id)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("it's dead")
+
+	return nil
 }
