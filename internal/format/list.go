@@ -15,7 +15,7 @@ func DisplayList(includeArchived bool) {
 		"Timesheet", "Running", "Today", "Total Time")
 	summaries := t.List()
 	for _, summary := range summaries {
-		if (!includeArchived) && summary.Sheet[0:1] == "_" {
+		if (!includeArchived) && len(summary.Sheet) > 0 && summary.Sheet[0:1] == "_" {
 			continue
 		}
 
