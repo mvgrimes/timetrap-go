@@ -12,9 +12,9 @@ import (
 
 var killCmd = &cobra.Command{
 	Use:     "kill",
-	Aliases: []string{""},
-	Short:   "",
-	Long:    "",
+	Aliases: []string{"k"},
+	Short:   "Delete a timesheet or an entry.",
+	Long:    "Delete a timesheet or an entry.",
 	Run: func(cmd *cobra.Command, args []string) {
 		id, _ := cmd.Flags().GetInt("id")
 		runKill(id, args)

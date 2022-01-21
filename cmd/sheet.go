@@ -13,7 +13,7 @@ import (
 
 var sheetCmd = &cobra.Command{
 	Use:     "sheet",
-	Aliases: []string{"s"},
+	Aliases: []string{"s", "sh"},
 	Short:   "Stop the timer for a timesheet.",
 	Long: `Switch to a timesheet creating it if necessary. When no sheet is
 			specified list all sheets. The special sheetname '-' will switch to the
