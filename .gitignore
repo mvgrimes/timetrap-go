@@ -2,3 +2,7 @@ tmp/
 
 /main
 /timetrap
+data/
+
+/out.go
+/t.sql
