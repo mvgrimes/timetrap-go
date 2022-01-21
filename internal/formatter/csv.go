@@ -14,7 +14,7 @@ func FormatAsCsv(entries []tt.Entry, sheet string, includeIds bool) {
 	}
 	fmt.Println(strings.Join(header, ","))
 
-	DateFmt := "2006-01-02 15:04:05"
+	dateFmt := "2006-01-02 15:04:05"
 	for _, entry := range entries {
 		// Ruby version does not include any currently running entries
 		if !entry.End.Valid {
@@ -22,8 +22,8 @@ func FormatAsCsv(entries []tt.Entry, sheet string, includeIds bool) {
 		}
 
 		fields := []string{
-			entry.Start.Time.Format(DateFmt),
-			entry.End.Time.Format(DateFmt),
+			entry.Start.Time.Format(dateFmt),
+			entry.End.Time.Format(dateFmt),
 			entry.Sheet,
 			entry.Note,
 		}

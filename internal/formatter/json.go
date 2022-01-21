@@ -11,7 +11,7 @@ func FormatAsJson(entries []tt.Entry, sheet string, includeIds bool) {
 	// Ruby version defaults to including id
 
 	fmtEntries := []string{}
-	DateFmt := "2006-01-02 15:04:05 -0500"
+	dateFmt := "2006-01-02 15:04:05 -0500"
 	for _, entry := range entries {
 		// Ruby version does not include any currently running entries
 		if !entry.End.Valid {
@@ -22,8 +22,8 @@ func FormatAsJson(entries []tt.Entry, sheet string, includeIds bool) {
 		fmtEntry := fmt.Sprintf(`{"id":%d,"note":"%s","start":"%s","end":"%s","sheet":"%s"}`,
 			entry.ID,
 			entry.Note,
-			entry.Start.Time.Format(DateFmt),
-			entry.End.Time.Format(DateFmt),
+			entry.Start.Time.Format(dateFmt),
+			entry.End.Time.Format(dateFmt),
 			entry.Sheet,
 		)
 

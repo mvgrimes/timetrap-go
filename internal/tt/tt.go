@@ -32,6 +32,8 @@ type TimeTrap struct {
 	db       *sql.DB
 }
 
+const dateFmt = "2006-01-02 15:04:05.999999"
+
 func (t *TimeTrap) Connect(filename string) {
 	db, err := sql.Open("sqlite3", filename)
 	if err != nil {
@@ -205,7 +207,7 @@ func (t *TimeTrap) Stop(stopTime time.Time) (Entry, error) {
 		return entry, errors.New(fmt.Sprintf(`No running entry on sheet "%s".`, entry.Sheet))
 	}
 
-	stopTimeStr := stopTime.Format("2006-01-02 15:04:05.999999")
+	stopTimeStr := stopTime.Format(dateFmt)
 
 	res, err := t.db.Exec(
 		`UPDATE entries SET end = ?
@@ -395,15 +397,21 @@ func (t *TimeTrap) deleteEntry(id int) error {
 }
 
 func (t *TimeTrap) UpdateEntry(id int, sheet string, startTime time.Time, endTime time.Time, note string) error {
-	var endTimeOrNull sql.NullTime
+	var endTimeOrNull sql.NullString
 	if !endTime.Equal(time.Time{}) {
-		fmt.Println("set end time")
-		endTimeOrNull.Time = endTime
+		endTimeOrNull.String = endTime.Format(dateFmt)
 		endTimeOrNull.Valid = true
 	}
+
+	var startTimeOrNull sql.NullString
+	if !startTime.Equal(time.Time{}) {
+		startTimeOrNull.String = startTime.Format(dateFmt)
+		startTimeOrNull.Valid = true
+	}
+
 	res, err := t.db.Exec(
 		"UPDATE entries SET sheet = ?, start = ?, end = ?, note = ? WHERE id = ?",
-		sheet, startTime, endTimeOrNull, note, id,
+		sheet, startTimeOrNull, endTimeOrNull, note, id,
 	)
 	if err != nil {
 		panic(err.Error())

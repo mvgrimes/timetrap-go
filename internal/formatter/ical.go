@@ -16,7 +16,7 @@ func FormatAsIcal(entries []tt.Entry, sheet string, includeIds bool) {
 	fmt.Println("PRODID:iCalendar-Ruby")
 	fmt.Println("VERSION:2.0")
 
-	DateFmt := "20060102T150405"
+	dateFmt := "20060102T150405"
 	for _, entry := range entries {
 		// Ruby version does not include any currently running entries
 		if !entry.End.Valid {
@@ -25,9 +25,9 @@ func FormatAsIcal(entries []tt.Entry, sheet string, includeIds bool) {
 
 		fmt.Println("BEGIN:VEVENT")
 		fmt.Printf("DESCRIPTION:%s\n", entry.Note)
-		fmt.Printf("DTEND:%s\n", entry.End.Time.Format(DateFmt))
-		fmt.Printf("DTSTAMP:%s\n", time.Now().Format(DateFmt))
-		fmt.Printf("DTSTART:%s\n", entry.Start.Time.Format(DateFmt))
+		fmt.Printf("DTEND:%s\n", entry.End.Time.Format(dateFmt))
+		fmt.Printf("DTSTAMP:%s\n", time.Now().Format(dateFmt))
+		fmt.Printf("DTSTART:%s\n", entry.Start.Time.Format(dateFmt))
 		fmt.Printf("SEQUENCE:%d\n", 0)
 		fmt.Printf("SUMMARY:%s\n", entry.Note)
 		fmt.Printf("UID:%s\n", Uid())
