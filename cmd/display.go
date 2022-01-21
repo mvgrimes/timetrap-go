@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mvgrimes/timetrap-go/internal/format"
+	"github.com/mvgrimes/timetrap-go/internal/formatter"
 	"github.com/mvgrimes/timetrap-go/internal/parse"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
@@ -24,9 +24,14 @@ var displayCmd = &cobra.Command{
 		includeIds, _ := cmd.Flags().GetBool("ids")
 		start, _ := cmd.Flags().GetString("start")
 		end, _ := cmd.Flags().GetString("end")
-		// format, _ := cmd.Flags().GetString("format")
+		format, _ := cmd.Flags().GetString("format")
 		grep, _ := cmd.Flags().GetString("grep")
-		runDisplay(includeIds, start, end, grep, args)
+
+		if format == "" {
+			format = viper.GetString("default_formatter")
+		}
+
+		runDisplay(includeIds, start, end, grep, format, args)
 	},
 }
 
@@ -44,7 +49,7 @@ in this`)
 }
 
 // TODO: add output formatting
-func runDisplay(includeIds bool, startStr string, endStr string, grep string, args []string) {
+func runDisplay(includeIds bool, startStr string, endStr string, grep string, format string, args []string) {
 	if len(args) > 0 {
 		fmt.Println("usage: t display")
 		os.Exit(1)
@@ -75,5 +80,19 @@ func runDisplay(includeIds bool, startStr string, endStr string, grep string, ar
 	meta := t.GetMeta()
 	entries := t.GetFilteredEntries(meta.CurrentSheet, start, end, grep)
 
-	format.DisplayEntries(entries, meta.CurrentSheet, includeIds)
+	switch format {
+	case "text":
+		formatter.FormatAsText(entries, meta.CurrentSheet, includeIds)
+	case "csv":
+		formatter.FormatAsCsv(entries, meta.CurrentSheet, includeIds)
+	case "json":
+		formatter.FormatAsJson(entries, meta.CurrentSheet, includeIds)
+	case "ical":
+		formatter.FormatAsIcal(entries, meta.CurrentSheet, includeIds)
+	case "ids":
+		formatter.FormatAsIds(entries, meta.CurrentSheet, includeIds)
+	default:
+		fmt.Printf("Don't recognize that formatter: %s\n", format)
+		os.Exit(1)
+	}
 }
