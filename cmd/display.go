@@ -48,7 +48,6 @@ in this`)
 	displayCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
 }
 
-// TODO: add output formatting
 func runDisplay(includeIds bool, startStr string, endStr string, grep string, format string, args []string) {
 	if len(args) > 0 {
 		fmt.Println("usage: t display")

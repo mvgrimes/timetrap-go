@@ -82,6 +82,7 @@ func runEdit(id int, start string, end string, appendToNote bool, move string, a
 
 	note := entry.Note
 	if len(args) > 0 {
+		// TODO: respect append_notes_delimiter
 		notes := []string{}
 		if appendToNote {
 			notes = []string{note}
