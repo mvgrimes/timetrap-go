@@ -89,6 +89,27 @@ func (t *TimeTrap) GetCurrentEntry() Entry {
 	return entry
 }
 
+func (t *TimeTrap) GetEntry(id int) Entry {
+	entry := Entry{}
+
+	err := t.db.QueryRow(`SELECT id, sheet, start, end, note
+						FROM entries
+						WHERE id = ?
+						ORDER BY id DESC
+						LIMIT 1;`,
+		id,
+	).Scan(&entry.ID, &entry.Sheet, &entry.Start, &entry.End, &entry.Note)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Entry{}
+		}
+		panic(err.Error())
+	}
+
+	log.Printf("entry: %v", entry)
+	return entry
+}
+
 func (t *TimeTrap) GetEntries(sheet string) []Entry {
 	results, err := t.db.Query(
 		`SELECT id, sheet, start, end, note
