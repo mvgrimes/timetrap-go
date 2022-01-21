@@ -5,10 +5,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mvgrimes/timetrap-go/internal/parse"
-	"github.com/mvgrimes/timetrap-go/internal/tt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/mvgrimes/timetrap-go/internal/format"
+	"github.com/mvgrimes/timetrap-go/internal/parse"
+	"github.com/mvgrimes/timetrap-go/internal/tt"
 )
 
 var editCmd = &cobra.Command{
@@ -94,7 +96,7 @@ func runEdit(id int, start string, end string, appendToNote bool, move string, a
 	}
 
 	// Print the entry via display
-	// entry = t.GetEntry(entry.ID)
-	// entries := []tt.SheetDetails{ entry }
-	// format.DisplayEntries(entries, meta.CurrentSheet, includeIds)
+	entry = t.GetEntry(entry.ID)
+	entries := []tt.Entry{entry}
+	format.DisplayEntries(entries, entry.Sheet, false)
 }
