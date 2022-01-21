@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
+	"github.com/mvgrimes/timetrap-go/internal/format"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
@@ -34,5 +36,13 @@ func runNow(args []string) {
 	t.Connect(viper.GetString("database_file"))
 	meta := t.GetMeta()
 
-	fmt.Printf("%s\n", meta.CurrentSheet)
+	entry := t.GetCurrentEntry()
+	state := "not running"
+	if entry.Start.Valid && !entry.End.Valid {
+		state = format.Duration(time.Now().Sub(entry.Start.Time))
+	}
+
+	fmt.Printf("*%s: %s\n", meta.CurrentSheet, state)
+
+	// TODO: support multiple running sheets
 }

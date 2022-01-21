@@ -75,11 +75,12 @@ func runDisplay(args []string) {
 			"%-4s %-18s %-8s - %-8s   %8s   %s\n",
 			id,
 			day,
-			entry.Start.Format("15:04:05"),
-			entry.End.Format("15:04:05"),
+			entry.Start.Time.Format("15:04:05"),
+			entry.End.Time.Format("15:04:05"),
 			format.Duration(entry.Duration),
 			entry.Note,
 		)
+		// TODO: display "" for empty end
 		lastDay = day
 		total += entry.Duration
 		// TODO: add daily total

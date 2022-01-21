@@ -31,7 +31,6 @@ func init() {
 
 func runIn(args []string) {
 	note := ""
-
 	if len(args) > 0 {
 		note = strings.Join(args, " ")
 	}

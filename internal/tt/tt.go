@@ -76,11 +76,13 @@ func (t *TimeTrap) GetCurrentEntry() Entry {
 		meta.CurrentSheet,
 	).Scan(&entry.ID, &entry.Sheet, &entry.Start, &entry.End, &entry.Note)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Entry{}
+		}
 		panic(err.Error())
 	}
 
 	log.Printf("entry: %v", entry)
-
 	return entry
 }
 
@@ -108,9 +110,10 @@ func (t *TimeTrap) GetEntries(sheet string) []Entry {
 }
 
 func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
+	meta := t.GetMeta()
 	entry := t.GetCurrentEntry()
 
-	if !entry.End.Valid {
+	if entry.Start.Valid && !entry.End.Valid {
 		return entry, errors.New("Timetrap is already running")
 	}
 
@@ -121,7 +124,7 @@ func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
 				(start, sheet, note)
 				VALUES
 				(?, ?, ?);`,
-		startTimeStr, entry.Sheet, note)
+		startTimeStr, meta.CurrentSheet, note)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -131,7 +134,7 @@ func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
 	}
 	log.Printf("result id = %d\n", id)
 
-	return entry, nil
+	return t.GetCurrentEntry(), nil
 }
 
 func (t *TimeTrap) Stop(stopTime time.Time) (Entry, error) {
@@ -158,7 +161,7 @@ func (t *TimeTrap) Stop(stopTime time.Time) (Entry, error) {
 		panic(fmt.Sprintf("wrong number of rows updated: %d\n", rowCnt))
 	}
 
-	return entry, nil
+	return t.GetCurrentEntry(), nil
 }
 
 func (t *TimeTrap) SwitchSheet(sheet string) (Meta, error) {
@@ -255,8 +258,8 @@ func (t *TimeTrap) List() []SheetSummary {
 type SheetDetails struct {
 	ID       int64 `json:"id"`
 	Day      string
-	Start    time.Time     `json:"start"`
-	End      time.Time     `json:"end"`
+	Start    sql.NullTime  `json:"start"`
+	End      sql.NullTime  `json:"end"`
 	Duration time.Duration `json:"duration"`
 	Note     string        `json:"note"`
 }
@@ -283,7 +286,7 @@ func (t *TimeTrap) Display() []SheetDetails {
 	for results.Next() {
 		var summary SheetDetails
 		err = results.Scan(&summary.ID, &summary.Start, &summary.End, &summary.Duration, &summary.Note)
-		summary.Day = summary.Start.Format("Mon Jan 02, 2006")
+		summary.Day = summary.Start.Time.Format("Mon Jan 02, 2006")
 		if err != nil {
 			panic(err.Error())
 		}
