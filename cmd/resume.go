@@ -25,6 +25,7 @@ func init() {
 	resumeCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
 }
 
+// TODO: implement resume command
 func runResume(args []string) {
 	if len(args) != 0 {
 		fmt.Printf("usage: t resume [SHEET]")

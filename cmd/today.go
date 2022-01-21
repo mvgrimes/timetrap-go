@@ -31,6 +31,7 @@ Documentation on defining custom formats can be found in the README included
 in this`)
 }
 
+// TODO: implement the today command
 func runToday(args []string) {
 	if len(args) != 0 {
 		fmt.Printf("usage: t today [SHEET | all]")

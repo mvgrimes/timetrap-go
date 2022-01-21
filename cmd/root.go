@@ -34,6 +34,7 @@ func init() {
 	rootCmd.PersistentFlags().Bool("debug", false, "Display stack traces for errors.")
 }
 
+// TODO: create the database if it doesn't exist
 func initConfig() {
 	viper.SetConfigType("yaml")
 	configFile := os.ExpandEnv("$TIMETRAP_CONFIG_FILE")

@@ -29,6 +29,7 @@ Documentation on defining custom formats can be found in the README included
 in this`)
 }
 
+// TODO: implement the week command
 func runWeek(args []string) {
 	if len(args) != 0 {
 		fmt.Printf("usage: t week [SHEET | all]")

@@ -27,6 +27,7 @@ func init() {
 	editCmd.PersistentFlags().StringP("move", "m", "", "Move to another sheet")
 }
 
+// TODO: implment edit command
 func runEdit(args []string) {
 	if len(args) != 0 {
 		fmt.Printf("usage: t edit ...")

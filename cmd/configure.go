@@ -29,7 +29,7 @@ func runConfigure(args []string) {
 	}
 
 	fmt.Printf("Config file is at \"%s\"\n", viper.GetViper().ConfigFileUsed())
-	// TODO: does this do anything else?
+	// TODO: does configuration command do anything else?
 
 	os.Exit(0)
 }

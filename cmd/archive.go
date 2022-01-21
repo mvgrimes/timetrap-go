@@ -32,6 +32,7 @@ func runArchive(args []string) {
 		os.Exit(1)
 	}
 
+	// TODO: implement archive command
 	fmt.Println("archive command is not yet implemented")
 	os.Exit(1)
 }
