@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/mvgrimes/timetrap-go/internal/format"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
@@ -51,38 +50,7 @@ func runDisplay(includeIds bool, args []string) {
 	t.Connect(viper.GetString("database_file"))
 
 	meta := t.GetMeta()
-	idHeader := ""
-	if includeIds {
-		idHeader = "Id"
-	}
-	fmt.Printf("Timesheet: %s\n", meta.CurrentSheet)
-	fmt.Printf("%-4s %-18s %-8s   %-8s   %8s   %s\n", idHeader, "Day", "Start", "End", "Duration", "Notes")
 	entries := t.Display()
-	lastDay := ""
-	var total time.Duration
-	for _, entry := range entries {
-		day := ""
-		if lastDay != entry.Day {
-			day = entry.Day
-		}
-		id := ""
-		if includeIds {
-			id = fmt.Sprintf("%d", entry.ID)
-		}
-		fmt.Printf(
-			"%-4s %-18s %-8s - %-8s   %8s   %s\n",
-			id,
-			day,
-			entry.Start.Time.Format("15:04:05"),
-			entry.End.Time.Format("15:04:05"),
-			format.Duration(entry.Duration),
-			entry.Note,
-		)
-		// TODO: display "" for empty end
-		lastDay = day
-		total += entry.Duration
-		// TODO: add daily total
-	}
-	fmt.Printf("    -------------------------------------------------\n")
-	fmt.Printf("    Total %43s\n", format.Duration(total))
+
+	format.DisplayEntries(entries, meta.CurrentSheet, includeIds)
 }
