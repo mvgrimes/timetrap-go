@@ -279,6 +279,7 @@ func (t *TimeTrap) List() []SheetSummary {
 	return summaries
 }
 
+// FIXME: terrible name
 type SheetDetails struct {
 	ID       int `json:"id"`
 	Day      string
@@ -288,6 +289,7 @@ type SheetDetails struct {
 	Note     string        `json:"note"`
 }
 
+// FIXME: terrible name
 func (t *TimeTrap) Display() []SheetDetails {
 	meta := t.GetMeta()
 
@@ -394,6 +396,31 @@ func (t *TimeTrap) deleteEntry(id int) error {
 		panic(err.Error())
 	}
 	fmt.Println("it's dead")
+
+	return nil
+}
+
+func (t *TimeTrap) UpdateEntry(id int, sheet string, startTime time.Time, endTime time.Time, note string) error {
+	var endTimeOrNull sql.NullTime
+	if !endTime.Equal(time.Time{}) {
+		fmt.Println("set end time")
+		endTimeOrNull.Time = endTime
+		endTimeOrNull.Valid = true
+	}
+	res, err := t.db.Exec(
+		"UPDATE entries SET sheet = ?, start = ?, end = ?, note = ? WHERE id = ?",
+		sheet, startTime, endTimeOrNull, note, id,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+	rowCnt, err := res.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+	if rowCnt != 1 {
+		panic(fmt.Sprintf("wrong number of rows updated: %d\n", rowCnt))
+	}
 
 	return nil
 }
