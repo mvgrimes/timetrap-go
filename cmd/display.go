@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/mvgrimes/timetrap-go/internal/format"
+	"github.com/mvgrimes/timetrap-go/internal/parse"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
@@ -20,7 +22,11 @@ var displayCmd = &cobra.Command{
       unarchived sheets.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		includeIds, _ := cmd.Flags().GetBool("ids")
-		runDisplay(includeIds, args)
+		start, _ := cmd.Flags().GetString("start")
+		end, _ := cmd.Flags().GetString("end")
+		// format, _ := cmd.Flags().GetString("format")
+		grep, _ := cmd.Flags().GetString("grep")
+		runDisplay(includeIds, start, end, grep, args)
 	},
 }
 
@@ -37,10 +43,8 @@ in this`)
 	displayCmd.PersistentFlags().StringP("grep", "g", "", "Include entries where the note matches this regexp.")
 }
 
-// TODO: add start/end filtering
 // TODO: add output formatting
-// TODO: add grep filtering
-func runDisplay(includeIds bool, args []string) {
+func runDisplay(includeIds bool, startStr string, endStr string, grep string, args []string) {
 	if len(args) > 0 {
 		fmt.Println("usage: t display")
 		os.Exit(1)
@@ -49,8 +53,27 @@ func runDisplay(includeIds bool, args []string) {
 	t := tt.TimeTrap{}
 	t.Connect(viper.GetString("database_file"))
 
+	var err error
+	var start sql.NullTime
+	if startStr != "" {
+		start.Time, err = parse.Time(startStr)
+		if err != nil {
+			panic(err.Error())
+		}
+		start.Valid = true
+	}
+
+	var end sql.NullTime
+	if endStr != "" {
+		end.Time, err = parse.Time(endStr)
+		if err != nil {
+			panic(err.Error())
+		}
+		end.Valid = true
+	}
+
 	meta := t.GetMeta()
-	entries := t.GetEntries(meta.CurrentSheet)
+	entries := t.GetFilteredEntries(meta.CurrentSheet, start, end, grep)
 
 	format.DisplayEntries(entries, meta.CurrentSheet, includeIds)
 }

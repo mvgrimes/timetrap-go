@@ -85,6 +85,6 @@ func DisplayEntries(entries []tt.Entry, sheet string, includeIds bool) {
 		// TODO: add daily total
 	}
 
-	fmt.Printf("    -------------------------------------------------\n")
+	fmt.Printf("    --------------------------------------------------\n")
 	fmt.Printf("    Total %43s\n", Duration(total))
 }

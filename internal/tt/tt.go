@@ -133,6 +133,43 @@ func (t *TimeTrap) GetEntries(sheet string) []Entry {
 	return entries
 }
 
+func (t *TimeTrap) GetFilteredEntries(sheet string, start sql.NullTime, end sql.NullTime, grep string) []Entry {
+	var params []interface{}
+	params = append(params, sheet)
+
+	sql := "SELECT id, sheet, start, end, note FROM entries WHERE sheet = ? "
+	if start.Valid {
+		sql = sql + "AND start >= ? "
+		params = append(params, start.Time.Format("2006-01-02"))
+	}
+	if end.Valid {
+		sql = sql + "AND start <= ? "
+		params = append(params, end.Time.Add(time.Hour*24).Format("2006-01-02"))
+	}
+	if grep != "" {
+		sql = sql + "AND note LIKE ? "
+		params = append(params, grep)
+	}
+	sql = sql + ";"
+
+	results, err := t.db.Query(sql, params...)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	entries := []Entry{}
+	for results.Next() {
+		var entry Entry
+		err = results.Scan(&entry.ID, &entry.Sheet, &entry.Start, &entry.End, &entry.Note)
+		if err != nil {
+			panic(err.Error())
+		}
+		entries = append(entries, entry)
+	}
+
+	return entries
+}
+
 func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
 	meta := t.GetMeta()
 	entry := t.GetCurrentEntry()
