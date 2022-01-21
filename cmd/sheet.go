@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/mvgrimes/timetrap-go/internal/format"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
@@ -28,7 +29,8 @@ func init() {
 
 func runSheet(args []string) {
 	if len(args) == 0 {
-		// TODO: list sheets
+		format.DisplayList(true)
+		return
 	} else if len(args) > 1 {
 		fmt.Println("usage: t sheet [TIMESHEET]")
 		os.Exit(1)
