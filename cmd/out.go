@@ -47,5 +47,5 @@ func runOut(args []string) {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	fmt.Printf(`Checked out of sheet "%s"\n`, entry.Sheet)
+	fmt.Printf("Checked out of sheet \"%s\"\n", entry.Sheet)
 }

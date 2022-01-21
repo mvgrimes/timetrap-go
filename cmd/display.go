@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/mvgrimes/timetrap-go/internal/format"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 
 	"github.com/spf13/cobra"
@@ -67,7 +68,7 @@ func runDisplay(args []string) {
 			day,
 			entry.Start.Format("15:04:05"),
 			entry.End.Format("15:04:05"),
-			entry.Duration,
+			format.Duration(entry.Duration),
 			entry.Note,
 		)
 		lastDay = day
@@ -75,5 +76,5 @@ func runDisplay(args []string) {
 		// TODO: add daily total
 	}
 	fmt.Printf("    -------------------------------------------------\n")
-	fmt.Printf("    Total %43s\n", total)
+	fmt.Printf("    Total %43s\n", format.Duration(total))
 }

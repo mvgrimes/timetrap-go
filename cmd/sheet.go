@@ -44,5 +44,5 @@ func runSheet(args []string) {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	fmt.Printf(`Switching to sheet "%s"\n`, meta.CurrentSheet)
+	fmt.Printf("Switching to sheet \"%s\"\n", meta.CurrentSheet)
 }
