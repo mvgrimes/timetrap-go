@@ -172,22 +172,21 @@ func (t *TimeTrap) GetFilteredEntries(sheet string, start sql.NullTime, end sql.
 	return entries
 }
 
-func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
-	meta := t.GetMeta()
-	entry := t.GetCurrentEntry()
+func (t *TimeTrap) ClockIn(sheet string, startTime time.Time, note string) (Entry, error) {
+	entry := t.GetCurrentEntry() // respect sheet?
 
 	if entry.Start.Valid && !entry.End.Valid {
 		return entry, errors.New("Timetrap is already running")
 	}
 
-	startTimeStr := startTime.Format("2006-01-02 15:04:05.999999")
+	startTimeStr := startTime.Format(dateFmt)
 
 	result, err := t.db.Exec(
 		`INSERT INTO entries
 				(start, sheet, note)
 				VALUES
 				(?, ?, ?);`,
-		startTimeStr, meta.CurrentSheet, note)
+		startTimeStr, sheet, note)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -200,7 +199,7 @@ func (t *TimeTrap) Start(startTime time.Time, note string) (Entry, error) {
 	return t.GetCurrentEntry(), nil
 }
 
-func (t *TimeTrap) Stop(stopTime time.Time) (Entry, error) {
+func (t *TimeTrap) ClockOut(stopTime time.Time) (Entry, error) {
 	entry := t.GetCurrentEntry()
 
 	if entry.End.Valid {

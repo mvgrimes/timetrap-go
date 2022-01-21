@@ -66,7 +66,7 @@ func runResume(id int, atTimeStr string, args []string) {
 		os.Exit(1)
 	}
 
-	entry, err = t.Start(atTime, entry.Note)
+	entry, err = t.ClockIn(meta.CurrentSheet, atTime, entry.Note)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
