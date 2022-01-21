@@ -4,19 +4,19 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/format"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Aliases: []string{"l"},
+	Aliases: []string{"ls", "l"},
 	Short:   "Show the available timesheets.",
-	Long:    `Show the available timesheets.`,
+	Long:    `Show the available timesheets. If run as 'ls' do not include the archived sheets.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runList(args)
+		includeArchived := cmd.CalledAs() != "ls"
+		runList(includeArchived, args)
 	},
 }
 
