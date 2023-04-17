@@ -6,7 +6,8 @@ import (
 	"time"
 
 	"github.com/olebedev/when"
-	"github.com/olebedev/when/rules/common"
+	// "github.com/olebedev/when/rules/common"
+	"github.com/mvgrimes/timetrap-go/internal/when/rules/common"
 	"github.com/olebedev/when/rules/en"
 )
 
