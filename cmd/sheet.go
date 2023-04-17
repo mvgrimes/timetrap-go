@@ -29,9 +29,8 @@ func init() {
 
 func runSheet(args []string) {
 	if len(args) == 0 {
-		t := tt.TimeTrap{}
-		t.Connect(viper.GetString("database_file"))
-		summaries := t.List()
+		t := tt.New(viper.GetString("database_file"))
+		summaries := t.DB.GetSheets()
 		format.DisplayList(summaries, true)
 		return
 	} else if len(args) > 1 {
@@ -41,10 +40,9 @@ func runSheet(args []string) {
 
 	sheet := args[0]
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
-	meta, err := t.SwitchSheet(sheet)
+	meta, err := t.DB.SwitchSheet(sheet)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)

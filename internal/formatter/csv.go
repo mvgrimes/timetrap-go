@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func FormatAsCsv(entries []tt.Entry, sheet string, includeIds bool) {
+func FormatAsCsv(entries []models.Entry, sheet string, includeIds bool) {
 	header := []string{"start", "end", "note", "sheet"}
 	if includeIds {
 		header = append([]string{"id"}, header...)

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func FormatAsJson(entries []tt.Entry, sheet string, includeIds bool) {
+func FormatAsJson(entries []models.Entry, sheet string, includeIds bool) {
 	// Ruby version defaults to including id
 
 	fmtEntries := []string{}

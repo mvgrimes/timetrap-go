@@ -35,14 +35,12 @@ func runOut(atTimeStr string, args []string) {
 	// }
 
 	atTime, err := parse.Time(atTimeStr)
-
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
 	entry, err := t.ClockOut(atTime)
 	if err != nil {

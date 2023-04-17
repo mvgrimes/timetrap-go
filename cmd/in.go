@@ -42,9 +42,8 @@ func runIn(atTimeStr string, args []string) {
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
-	meta := t.GetMeta()
+	t := tt.New(viper.GetString("database_file"))
+	meta := t.DB.GetMeta()
 	entry, err := t.ClockIn(meta.CurrentSheet, atTime, note)
 	if err != nil {
 		fmt.Println(err.Error())

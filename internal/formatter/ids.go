@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func FormatAsIds(entries []tt.Entry, sheet string, includeIds bool) {
+func FormatAsIds(entries []models.Entry, sheet string, includeIds bool) {
 	ids := []string{}
 
 	for _, entry := range entries {

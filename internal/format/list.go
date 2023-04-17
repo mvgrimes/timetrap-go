@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func DisplayList(summaries []tt.SheetSummary, includeArchived bool) {
+func DisplayList(summaries []models.Sheet, includeArchived bool) {
 	fmt.Printf(" %-15s  %-10s  %-10s  %s\n",
 		"Timesheet", "Running", "Today", "Total Time")
 	for _, summary := range summaries {
@@ -34,7 +34,7 @@ func DisplayList(summaries []tt.SheetSummary, includeArchived bool) {
 	}
 }
 
-func DisplayEntries(entries []tt.Entry, sheet string, includeIds bool) {
+func DisplayEntries(entries []models.Entry, sheet string, includeIds bool) {
 	idHeader := ""
 	if includeIds {
 		idHeader = "Id"

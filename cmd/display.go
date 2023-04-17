@@ -54,8 +54,7 @@ func runDisplay(includeIds bool, startStr string, endStr string, grep string, fo
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
 	var err error
 	var start sql.NullTime
@@ -76,8 +75,8 @@ func runDisplay(includeIds bool, startStr string, endStr string, grep string, fo
 		end.Valid = true
 	}
 
-	meta := t.GetMeta()
-	entries := t.GetFilteredEntries(meta.CurrentSheet, start, end, grep)
+	meta := t.DB.GetMeta()
+	entries := t.DB.GetFilteredEntries(meta.CurrentSheet, start, end, grep)
 
 	switch format {
 	case "text":

@@ -42,19 +42,26 @@ func runResume(id int, atTimeStr string, args []string) {
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
-	meta := t.GetMeta()
-	entry := t.GetCurrentEntry()
+	meta := t.DB.GetMeta()
+	entry := t.DB.GetCurrentEntry()
 	if entry.ID == 0 {
-		fmt.Printf("No entry yet on this sheet yet. Started a new entry.")
-		// this is basically the Ruby implementation, but it could be improved
+		// this was the Ruby implementation:
+		// fmt.Println("No entry yet on this sheet yet. Started a new entry.")
+		// decided to just print an error
+		fmt.Println("No entry yet on this sheet yet. Exiting.")
+		os.Exit(1)
 	}
 
-	entry = t.GetEntry(id)
+	// If no id passed on command line
+	if id == 0 {
+		id = entry.ID
+	}
+
+	entry = t.DB.GetEntry(id)
 	if entry.ID == 0 {
-		fmt.Printf("Can't find entry")
+		fmt.Println("Can't find entry")
 		os.Exit(1)
 	}
 

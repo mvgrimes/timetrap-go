@@ -40,10 +40,9 @@ func runKill(id int, args []string) {
 }
 
 func killEntry(id int) {
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
-	err := t.DeleteEntry(id)
+	err := t.DB.DeleteEntry(id)
 	if err != nil {
 		fmt.Printf(err.Error())
 		os.Exit(1)
@@ -51,10 +50,9 @@ func killEntry(id int) {
 }
 
 func killSheet(sheet string) {
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
-	err := t.DeleteSheet(sheet)
+	err := t.DB.DeleteSheet(sheet)
 	if err != nil {
 		fmt.Printf(err.Error())
 		os.Exit(1)

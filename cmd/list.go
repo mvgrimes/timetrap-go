@@ -32,9 +32,8 @@ func runList(includeArchived bool, args []string) {
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
-	summaries := t.List()
+	t := tt.New(viper.GetString("database_file"))
+	summaries := t.DB.GetSheets()
 
 	format.DisplayList(summaries, includeArchived)
 }

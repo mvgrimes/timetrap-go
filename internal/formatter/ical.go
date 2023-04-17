@@ -6,10 +6,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func FormatAsIcal(entries []tt.Entry, sheet string, includeIds bool) {
+func FormatAsIcal(entries []models.Entry, sheet string, includeIds bool) {
 	fmt.Println("BEGIN:VCALENDAR")
 	fmt.Println("CALSCALE:GREGORIAN")
 	fmt.Println("METHOD:PUBLISH")

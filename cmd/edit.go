@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/mvgrimes/timetrap-go/internal/format"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 	"github.com/mvgrimes/timetrap-go/internal/parse"
 	"github.com/mvgrimes/timetrap-go/internal/tt"
 )
@@ -39,14 +40,13 @@ func init() {
 }
 
 func runEdit(id int, start string, end string, appendToNote bool, move string, args []string) {
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
+	t := tt.New(viper.GetString("database_file"))
 
-	var entry tt.Entry
+	var entry models.Entry
 	if id > 0 {
-		entry = t.GetEntry(id)
+		entry = t.DB.GetEntry(id)
 	} else {
-		entry = t.GetCurrentEntry()
+		entry = t.DB.GetCurrentEntry()
 		id = entry.ID
 	}
 
@@ -78,6 +78,7 @@ func runEdit(id int, start string, end string, appendToNote bool, move string, a
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+		fmt.Println(endTime)
 	}
 
 	note := entry.Note
@@ -90,14 +91,14 @@ func runEdit(id int, start string, end string, appendToNote bool, move string, a
 		notes = append(notes, args...)
 		note = strings.Join(notes, " ")
 	}
-	err = t.UpdateEntry(id, sheet, startTime, endTime, note)
+	err = t.DB.UpdateEntry(id, sheet, startTime, endTime, note)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
 	// Print the entry via display
-	entry = t.GetEntry(entry.ID)
-	entries := []tt.Entry{entry}
+	entry = t.DB.GetEntry(entry.ID)
+	entries := []models.Entry{entry}
 	format.DisplayEntries(entries, entry.Sheet, false)
 }

@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/mvgrimes/timetrap-go/internal/format"
-	"github.com/mvgrimes/timetrap-go/internal/tt"
+	"github.com/mvgrimes/timetrap-go/internal/models"
 )
 
-func FormatAsText(entries []tt.Entry, sheet string, includeIds bool) {
+func FormatAsText(entries []models.Entry, sheet string, includeIds bool) {
 	idHeader := ""
 	if includeIds {
 		idHeader = "Id"
@@ -21,9 +21,10 @@ func FormatAsText(entries []tt.Entry, sheet string, includeIds bool) {
 	for _, entry := range entries {
 		entryDay := entry.Start.Time.Format("Mon Jan 02, 2006")
 
-		day := ""
+		// Set the dayHeader to the current day if it is a new day
+		dayHeader := ""
 		if lastDay != entryDay {
-			day = entryDay
+			dayHeader = entryDay
 		}
 
 		id := ""
@@ -45,16 +46,19 @@ func FormatAsText(entries []tt.Entry, sheet string, includeIds bool) {
 		fmt.Printf(
 			"%-4s %-18s %-8s - %-8s   %8s   %s\n",
 			id,
-			day,
+			dayHeader,
 			entry.Start.Time.Format("15:04:05"),
 			endTimeStr,
 			format.Duration(duration),
 			entry.Note,
 		)
 
-		if day != "" {
-			lastDay = day
+		// Save the dayHeader if it wasn't ""
+		if dayHeader != "" {
+			lastDay = dayHeader
 		}
+
+		// Add to the total duration
 		total += duration
 		// TODO: add daily total
 	}

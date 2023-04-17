@@ -32,11 +32,10 @@ func runNow(args []string) {
 		os.Exit(1)
 	}
 
-	t := tt.TimeTrap{}
-	t.Connect(viper.GetString("database_file"))
-	meta := t.GetMeta()
+	t := tt.New(viper.GetString("database_file"))
+	meta := t.DB.GetMeta()
 
-	entry := t.GetCurrentEntry()
+	entry := t.DB.GetCurrentEntry()
 	state := "not running"
 	if entry.Start.Valid && !entry.End.Valid {
 		state = format.Duration(time.Now().Sub(entry.Start.Time))
