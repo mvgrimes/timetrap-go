@@ -1,6 +1,7 @@
 package common_test
 
 import (
+	// "log"
 	"testing"
 	"time"
 
@@ -19,7 +20,8 @@ type Fixture struct {
 	Text   string
 	Index  int
 	Phrase string
-	Diff   time.Duration
+	// Diff   time.Duration
+	Want time.Time
 }
 
 func ApplyFixtures(t *testing.T, name string, w *when.Parser, fixt []Fixture) {
@@ -29,7 +31,10 @@ func ApplyFixtures(t *testing.T, name string, w *when.Parser, fixt []Fixture) {
 		require.NotNil(t, res, "[%s] res #%d", name, i)
 		require.Equal(t, f.Index, res.Index, "[%s] index #%d", name, i)
 		require.Equal(t, f.Phrase, res.Text, "[%s] text #%d", name, i)
-		require.Equal(t, f.Diff, res.Time.Sub(null), "[%s] diff #%d", name, i)
+		// log.Printf("%v", res.Time)
+		// log.Printf("%v", res.Time.Sub(null))
+		// require.Equal(t, f.Diff, res.Time.Sub(null), "[%s] diff #%d %s", name, i, f.Phrase)
+		require.Equal(t, f.Want, res.Time, "[%s] diff #%d %s", name, i, f.Phrase)
 	}
 }
 
@@ -52,6 +57,13 @@ func ApplyFixturesErr(t *testing.T, name string, w *when.Parser, fixt []Fixture)
 func TestAll(t *testing.T) {
 	w := when.New(nil)
 	w.Add(common.All...)
+
+	// res, _ := w.Parse("7/14", null)
+	// log.Printf("7/14 = %v", res)
+	// res, _ = w.Parse("7/15", null)
+	// log.Printf("7/15 = %v", res)
+	// res, _ = w.Parse("7/16", null)
+	// log.Printf("7/16 = %v", res)
 
 	// complex cases
 	fixt := []Fixture{}

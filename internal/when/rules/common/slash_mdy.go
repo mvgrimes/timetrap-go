@@ -10,14 +10,12 @@ import (
 
 /*
 
-- DD/MM/YYYY
-- 11/3/2015
-- 11/3/2015
-- 11/3
+- MM/DD/YYYY
+- 3/14/2015
+- 03/14/2015
+- 3/14
 
 also with "\", gift for windows' users
-
-https://play.golang.org/p/29LkTfe1Xr
 */
 
 var MONTHS_DAYS = []int{
@@ -70,27 +68,25 @@ func SlashMDY(s rules.Strategy) rules.Rule {
 				return true, nil
 			}
 
-			if int(ref.Month()) > month {
-				year = ref.Year() + 1
-				goto WithYear
-			}
+			// TODO: add the WantPast or PreferPast option
 
-			if int(ref.Month()) == month {
-				if getDays(ref.Year(), month) >= day {
-					if day > ref.Day() {
-						year = ref.Year()
-					} else if day < ref.Day() {
-						year = ref.Year() + 1
-					} else {
-						return false, nil
-					}
-					goto WithYear
-				} else {
-					return false, nil
+			if month > int(ref.Month()) {
+				year = ref.Year() - 1
+			} else if month == int(ref.Month()) {
+				if day > getDays(ref.Year(), month) {
+					// invalid date: day is after the last day
 				}
+
+				if day > ref.Day() {
+					year = ref.Year() - 1
+				} else {
+					year = ref.Year()
+				}
+			} else {
+				year = ref.Year()
 			}
 
-			return true, nil
+			goto WithYear
 		},
 	}
 }

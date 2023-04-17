@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/olebedev/when"
+	"github.com/olebedev/when/rules"
 	// "github.com/olebedev/when/rules/common"
 	"github.com/mvgrimes/timetrap-go/internal/when/rules/common"
 	"github.com/olebedev/when/rules/en"
@@ -18,7 +19,7 @@ func Time(timeStr string) (time.Time, error) {
 
 	w := when.New(nil)
 	w.Add(en.All...)
-	w.Add(common.All...)
+	w.Add(common.SlashMDY(rules.Override))
 
 	r, err := w.Parse(timeStr, time.Now())
 	if err != nil || r == nil {
