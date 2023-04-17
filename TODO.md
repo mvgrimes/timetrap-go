@@ -1,5 +1,7 @@
 ## Road map
 
+### Port existing
+
 [ ] Setup database schema if it doesn't exist
 [ ] auto_sheets
 [x] formatters
@@ -16,5 +18,10 @@
 [ ] respect --yes flag
 [ ] autocomplete
 [ ] Clean up some of the aweful decisions in tt.go
+
+
+### Add features
+
+[ ] implement `list <sheet>`
 
 Also search codebase for 'TODO:' comments.
