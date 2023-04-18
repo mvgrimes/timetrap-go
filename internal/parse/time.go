@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/olebedev/when"
-	"github.com/olebedev/when/rules"
-	// "github.com/olebedev/when/rules/common"
-	"github.com/mvgrimes/timetrap-go/internal/when/rules/common"
-	"github.com/olebedev/when/rules/en"
+	"github.com/mvgrimes/when/rules"
+	"github.com/mvgrimes/when/rules/common"
+	"github.com/mvgrimes/when/rules/en"
+	"github.com/mvgrimes/when"
 )
 
 func Time(timeStr string) (time.Time, error) {
@@ -17,7 +16,10 @@ func Time(timeStr string) (time.Time, error) {
 		return time.Now(), nil
 	}
 
-	w := when.New(nil)
+	w := when.New(&rules.Options{
+		Distance:     5,
+		MatchByOrder: true,
+		WantPast:     true})
 	w.Add(en.All...)
 	w.Add(common.SlashMDY(rules.Override))
 
