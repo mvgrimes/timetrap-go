@@ -4,14 +4,10 @@ import (
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	// "os"
-	// "strings"
 	"time"
 
 	"github.com/mvgrimes/timetrap-go/internal/db"
 	"github.com/mvgrimes/timetrap-go/internal/models"
-	// "database/sql"
-	// _ "github.com/mattn/go-sqlite3"
 )
 
 // TODO: Keep this only in the db/models file

@@ -5,10 +5,9 @@ import (
 
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"time"
-	// log "github.com/sirupsen/logrus"
 	"os"
 	"strings"
+	"time"
 
 	"database/sql"
 )

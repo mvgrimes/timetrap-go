@@ -1,13 +1,6 @@
 package db
 
 import (
-	// "errors"
-	// "fmt"
-	// log "github.com/sirupsen/logrus"
-	// "os"
-	// "strings"
-	// "time"
-
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 )
