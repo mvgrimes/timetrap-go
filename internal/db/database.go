@@ -11,7 +11,7 @@ type Database struct {
 }
 
 func New(filename string) *Database {
-	conn, err := sql.Open("sqlite3", filename)
+	conn, err := sql.Open("sqlite3", filename+"?_loc=UTC")
 	if err != nil {
 		panic(err.Error())
 	}

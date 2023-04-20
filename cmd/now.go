@@ -38,7 +38,12 @@ func runNow(args []string) {
 	entry := t.DB.GetCurrentEntry()
 	state := "not running"
 	if entry.Start.Valid && !entry.End.Valid {
-		state = format.Duration(time.Now().Sub(entry.Start.Time))
+		// Get the current time but treat UTC as localtime
+		endTime := time.Now()
+		_, offset := endTime.Zone()
+		endTime = endTime.Add(time.Second * time.Duration(offset))
+
+		state = format.Duration(endTime.Sub(entry.Start.Time))
 	}
 
 	fmt.Printf("*%s: %s\n", meta.CurrentSheet, state)

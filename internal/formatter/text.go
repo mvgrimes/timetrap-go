@@ -35,9 +35,14 @@ func FormatAsText(entries []models.Entry, sheet string, includeIds bool) {
 		endTimeStr := ""
 		if entry.End.Valid {
 			endTimeStr = entry.End.Time.Format("15:04:05")
+			// endTimeStr = entry.End.Time.Format("15:04:05 -0700")
 		}
 
+		// Get the current time but treat UTC as localtime
 		endTime := time.Now()
+		_, offset := endTime.Zone()
+		endTime = endTime.Add(time.Second * time.Duration(offset))
+
 		if entry.End.Valid {
 			endTime = entry.End.Time
 		}
@@ -53,6 +58,20 @@ func FormatAsText(entries []models.Entry, sheet string, includeIds bool) {
 			entry.Note,
 		)
 
+		// fmt.Printf(
+		// 	"%-4s %-18s %-14s - %-14s   %8s   %s\n",
+		// 	id,
+		// 	dayHeader,
+		// 	entry.Start.Time.Format("15:04:05 -0700"),
+		// 	endTimeStr,
+		// 	format.Duration(duration),
+		// 	entry.Note,
+		// )
+
+		// if endTimeStr == "" {
+		// 	fmt.Printf("%s\n", endTime.Format("15:04:05 -0700"))
+		// }
+
 		// Save the dayHeader if it wasn't ""
 		if dayHeader != "" {
 			lastDay = dayHeader
@@ -65,4 +84,5 @@ func FormatAsText(entries []models.Entry, sheet string, includeIds bool) {
 
 	fmt.Printf("    --------------------------------------------------\n")
 	fmt.Printf("    Total %43s\n", format.Duration(total))
+
 }
